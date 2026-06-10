@@ -59,9 +59,12 @@ async function submitForm() {
 
     <form @submit.prevent="submitForm">
       <div class="form-group">
-        <label>Team Member</label>
+        <label>
+          Team Member
+          <span class="required-indicator" aria-hidden="true">*</span>
+        </label>
 
-        <select v-model="form.teamMemberId">
+        <select v-model="form.teamMemberId" required>
           <option value="">Select team member</option>
 
           <option
@@ -75,21 +78,32 @@ async function submitForm() {
       </div>
 
       <div class="form-group">
-        <label>Start Date</label>
+        <label>
+          Start Date
+          <span class="required-indicator" aria-hidden="true">*</span>
+        </label>
 
-        <input v-model="form.startDate" type="date" />
+        <input v-model="form.startDate" type="date" required />
       </div>
 
       <div class="form-group">
-        <label>End Date</label>
+        <label>
+          End Date <span class="required-indicator" aria-hidden="true">*</span>
+        </label>
 
-        <input v-model="form.endDate" type="date" />
+        <input v-model="form.endDate" type="date" required />
+
+        <p class="form-helper-text">
+          End date must be the same or after start date.
+        </p>
       </div>
 
       <div class="form-group">
-        <label>Reason</label>
+        <label>
+          Reason <span class="required-indicator" aria-hidden="true">*</span>
+        </label>
 
-        <input v-model="form.reason" type="text" />
+        <input v-model="form.reason" type="text" required />
       </div>
 
       <div class="form-group">

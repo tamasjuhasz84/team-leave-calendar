@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import api from "./api/api";
 import TeamMembers from "./components/TeamMembers.vue";
 import LeaveRequestForm from "./components/LeaveRequestForm.vue";
@@ -15,6 +15,11 @@ const errorMessage = ref("");
 
 const selectedTeamMemberId = ref("");
 const selectedStatus = ref("");
+const activeTab = ref("requests");
+
+const conflictCount = computed(
+  () => onCallSchedule.value.filter((week) => week.hasConflict).length,
+);
 
 async function loadData() {
   try {
@@ -77,38 +82,72 @@ onMounted(loadData);
       {{ errorMessage }}
     </p>
 
-    <section>
-      <TeamMembers :team-members="teamMembers" />
-    </section>
+    <div class="tabs" role="tablist" aria-label="Main sections">
+      <button
+        type="button"
+        class="tabs__button"
+        :class="{ 'tabs__button--active': activeTab === 'requests' }"
+        role="tab"
+        :aria-selected="activeTab === 'requests'"
+        @click="activeTab = 'requests'"
+      >
+        Requests
+      </button>
 
-    <section>
-      <LeaveRequestForm :team-members="teamMembers" @created="loadData" />
-    </section>
+      <button
+        type="button"
+        class="tabs__button"
+        :class="{ 'tabs__button--active': activeTab === 'on-call' }"
+        role="tab"
+        :aria-selected="activeTab === 'on-call'"
+        @click="activeTab = 'on-call'"
+      >
+        On-call
+      </button>
+    </div>
 
-    <section>
-      <FiltersPanel
-        :team-members="teamMembers"
-        :selected-team-member-id="selectedTeamMemberId"
-        :selected-status="selectedStatus"
-        @update:selected-team-member-id="handleTeamMemberFilterChange"
-        @update:selected-status="handleStatusFilterChange"
-        @clear="clearFilters"
-      />
-    </section>
+    <div v-if="activeTab === 'requests'" role="tabpanel" aria-label="Requests">
+      <section>
+        <TeamMembers :team-members="teamMembers" />
+      </section>
 
-    <section>
-      <LeaveRequestList
-        :leave-requests="leaveRequests"
-        @status-updated="loadData"
-      />
-    </section>
+      <section>
+        <LeaveRequestForm :team-members="teamMembers" @created="loadData" />
+      </section>
 
-    <section>
-      <LeaveCalendarView :leave-requests="leaveRequests" />
-    </section>
+      <section>
+        <FiltersPanel
+          :team-members="teamMembers"
+          :selected-team-member-id="selectedTeamMemberId"
+          :selected-status="selectedStatus"
+          @update:selected-team-member-id="handleTeamMemberFilterChange"
+          @update:selected-status="handleStatusFilterChange"
+          @clear="clearFilters"
+        />
+      </section>
 
-    <section>
-      <OnCallSchedule :on-call-schedule="onCallSchedule" />
-    </section>
+      <section>
+        <LeaveRequestList
+          :leave-requests="leaveRequests"
+          @status-updated="loadData"
+        />
+      </section>
+
+      <section>
+        <LeaveCalendarView :leave-requests="leaveRequests" />
+      </section>
+    </div>
+
+    <div v-else role="tabpanel" aria-label="On-call">
+      <section>
+        <p class="conflict-summary" v-if="onCallSchedule.length > 0">
+          {{ conflictCount }} conflict{{ conflictCount === 1 ? "" : "s" }} in
+          the next {{ onCallSchedule.length }} weeks.
+        </p>
+        <p class="conflict-summary" v-else>No on-call weeks loaded.</p>
+
+        <OnCallSchedule :on-call-schedule="onCallSchedule" />
+      </section>
+    </div>
   </main>
 </template>

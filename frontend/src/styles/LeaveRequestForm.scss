@@ -10,6 +10,16 @@
     font-weight: 600;
   }
 
+  .required-indicator {
+    color: #b91c1c;
+  }
+
+  .form-helper-text {
+    margin: 0.35rem 0 0;
+    font-size: 0.88rem;
+    color: #4b5563;
+  }
+
   input,
   select,
   textarea {
