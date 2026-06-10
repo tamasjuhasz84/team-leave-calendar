@@ -3,18 +3,41 @@ import { onMounted, ref } from "vue";
 import api from "./api/api";
 import TeamMembers from "./components/TeamMembers.vue";
 import LeaveRequestForm from "./components/LeaveRequestForm.vue";
+import LeaveRequestList from "./components/LeaveRequestList.vue";
+import OnCallSchedule from "./components/OnCallSchedule.vue";
+import FiltersPanel from "./components/FiltersPanel.vue";
+import LeaveCalendarView from "./components/LeaveCalendarView.vue";
 
 const teamMembers = ref([]);
 const leaveRequests = ref([]);
 const onCallSchedule = ref([]);
 const errorMessage = ref("");
 
+const selectedTeamMemberId = ref("");
+const selectedStatus = ref("");
+
 async function loadData() {
   try {
+    errorMessage.value = "";
+
+    const params = new URLSearchParams();
+
+    if (selectedTeamMemberId.value) {
+      params.append("teamMemberId", selectedTeamMemberId.value);
+    }
+
+    if (selectedStatus.value) {
+      params.append("status", selectedStatus.value);
+    }
+
+    const leaveRequestsUrl = params.toString()
+      ? `/leave-requests?${params.toString()}`
+      : "/leave-requests";
+
     const [teamMembersResponse, leaveRequestsResponse, onCallResponse] =
       await Promise.all([
         api.get("/team-members"),
-        api.get("/leave-requests"),
+        api.get(leaveRequestsUrl),
         api.get("/on-call?weeks=8"),
       ]);
 
@@ -25,6 +48,22 @@ async function loadData() {
     errorMessage.value = "Failed to load data.";
     console.error(error);
   }
+}
+
+function clearFilters() {
+  selectedTeamMemberId.value = "";
+  selectedStatus.value = "";
+  loadData();
+}
+
+function handleTeamMemberFilterChange(value) {
+  selectedTeamMemberId.value = value;
+  loadData();
+}
+
+function handleStatusFilterChange(value) {
+  selectedStatus.value = value;
+  loadData();
 }
 
 onMounted(loadData);
@@ -39,7 +78,7 @@ onMounted(loadData);
     </p>
 
     <section>
-      <TeamMembers :teamMembers="teamMembers" />
+      <TeamMembers :team-members="teamMembers" />
     </section>
 
     <section>
@@ -47,23 +86,29 @@ onMounted(loadData);
     </section>
 
     <section>
-      <h2>On-call Schedule</h2>
+      <FiltersPanel
+        :team-members="teamMembers"
+        :selected-team-member-id="selectedTeamMemberId"
+        :selected-status="selectedStatus"
+        @update:selected-team-member-id="handleTeamMemberFilterChange"
+        @update:selected-status="handleStatusFilterChange"
+        @clear="clearFilters"
+      />
+    </section>
 
-      <ul>
-        <li
-          v-for="week in onCallSchedule"
-          :key="week.weekStart"
-          :class="{ conflict: week.hasConflict }"
-        >
-          {{ week.weekStart }} to {{ week.weekEnd }}
-          —
-          {{ week.onCallPerson.name }}
-          <strong v-if="week.hasConflict">
-            Conflict! Suggested replacement:
-            {{ week.suggestedReplacement?.name || "No replacement available" }}
-          </strong>
-        </li>
-      </ul>
+    <section>
+      <LeaveRequestList
+        :leave-requests="leaveRequests"
+        @status-updated="loadData"
+      />
+    </section>
+
+    <section>
+      <LeaveCalendarView :leave-requests="leaveRequests" />
+    </section>
+
+    <section>
+      <OnCallSchedule :on-call-schedule="onCallSchedule" />
     </section>
   </main>
 </template>

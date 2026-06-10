@@ -1,0 +1,29 @@
+.filters-panel {
+  &__controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: flex-end;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    min-width: 180px;
+
+    label {
+      margin-bottom: 0.25rem;
+      font-weight: 600;
+    }
+
+    select {
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+  }
+
+  &__clear-button {
+    padding: 0.55rem 0.85rem;
+    cursor: pointer;
+  }
+}
