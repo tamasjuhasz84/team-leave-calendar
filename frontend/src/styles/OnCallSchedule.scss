@@ -1,12 +1,15 @@
 .on-call-schedule {
   &__table-wrapper {
     overflow-x: auto;
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch;
   }
 
   &__table {
     width: 100%;
     border-collapse: collapse;
     background: white;
+    min-width: 640px;
 
     th,
     td {
@@ -44,4 +47,37 @@
 .no-conflict-badge {
   background: #dcfce7;
   color: #166534;
+}
+
+@media (max-width: 768px) {
+  .on-call-schedule {
+    &__table {
+      font-size: 0.92rem;
+
+      th,
+      td {
+        padding: 0.6rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .on-call-schedule {
+    &__table {
+      font-size: 0.86rem;
+      min-width: 600px;
+
+      th,
+      td {
+        padding: 0.5rem;
+      }
+    }
+  }
+
+  .conflict-badge,
+  .no-conflict-badge {
+    font-size: 0.75rem;
+    padding: 0.22rem 0.42rem;
+  }
 }

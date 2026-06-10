@@ -1,12 +1,15 @@
 .leave-request-list {
   &__table-wrapper {
     overflow-x: auto;
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch;
   }
 
   &__table {
     width: 100%;
     border-collapse: collapse;
     background: white;
+    min-width: 720px;
 
     th,
     td {
@@ -68,4 +71,57 @@
 
 .leave-request-list__actions {
   white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .leave-request-list {
+    &__table {
+      font-size: 0.92rem;
+
+      th,
+      td {
+        padding: 0.6rem;
+      }
+    }
+
+    &__actions {
+      gap: 0.4rem;
+
+      button {
+        padding: 0.48rem 0.6rem;
+        font-size: 0.88rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .leave-request-list {
+    &__table {
+      font-size: 0.86rem;
+      min-width: 660px;
+
+      th,
+      td {
+        padding: 0.5rem;
+      }
+    }
+
+    &__actions {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      white-space: normal;
+
+      button {
+        width: 100%;
+        min-height: 2rem;
+      }
+    }
+  }
+
+  .status-badge {
+    font-size: 0.75rem;
+    padding: 0.22rem 0.42rem;
+  }
 }
