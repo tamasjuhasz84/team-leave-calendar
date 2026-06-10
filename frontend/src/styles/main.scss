@@ -1,0 +1,31 @@
+@use "./TeamMembers";
+@use "./LeaveRequestForm";
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+}
+
+.app {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+section {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+}
+
+.error {
+  color: crimson;
+}
+
+.conflict {
+  background: #ffe5e5;
+  border-left: 4px solid crimson;
+  padding: 0.5rem;
+}

@@ -1,0 +1,16 @@
+.team-members {
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__item {
+    padding: 0.5rem 0.75rem;
+    background: #eef2ff;
+    border-radius: 999px;
+    font-weight: 600;
+  }
+}
