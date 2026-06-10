@@ -1,0 +1,40 @@
+# IntelliJ
+
+.idea/
+*.iml
+
+# VS Code
+
+.vscode/
+
+# Java / Maven
+
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+
+# Logs
+
+*.log
+
+# Frontend
+
+frontend/node_modules/
+frontend/dist/
+
+# OS files
+
+.DS_Store
+Thumbs.db
+
+# Environment files
+
+.env
+.env.local
+
+# Coverage
+
+coverage/
+
+# Generated files
+
+*.class
