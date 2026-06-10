@@ -238,6 +238,16 @@ cd backend
 
 ---
 
+## Features Not Implemented
+
+The following optional or future improvements were not implemented:
+
+- Full calendar month view
+- Authentication and authorization
+- Editable team member management
+- Email notifications
+- OpenAPI / Swagger integration
+
 ## Future Improvements
 
 - Full calendar month view
